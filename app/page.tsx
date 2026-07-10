@@ -66,9 +66,24 @@ export default function Home() {
         }),
       });
       if (!res.ok) throw new Error("Erreur serveur");
+
+      setCivilite("MME");
+      setNom("");
+      setPrenom("");
+      setEmail("");
+      setTelephone("");
+      setTypeDemande("VISITE");
+      setMessage("");
+      setJour(JOURS[0]);
+      setHeure(HEURES[7]);
+      setMinute(MINUTES[0]);
+      setDisponibilites([]);
+
       setEnvoi("success");
+      setTimeout(() => setEnvoi("idle"), 3000);
     } catch (err) {
       setEnvoi("error");
+      setTimeout(() => setEnvoi("idle"), 3000);
     }
   }
 
@@ -77,23 +92,27 @@ export default function Home() {
       <div
         className="relative w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl"
         style={{
-          backgroundImage: "url('/interieur.jpg')",
+          backgroundImage: "url('/salon.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/45" />
 
         <form onSubmit={handleSubmit} className="relative z-10 p-10 text-white">
-          <h1 className="text-3xl font-bold mb-8">CONTACTEZ L&apos;AGENCE</h1>
+          <h1 className="text-3xl font-bold mb-8 tracking-wide">
+            CONTACTEZ L&apos;AGENCE
+          </h1>
 
           <div className="grid md:grid-cols-2 gap-10">
             {/* Colonne gauche : coordonnées + disponibilités */}
             <div>
-              <h2 className="font-bold tracking-wide mb-3">VOS COORDONNÉES</h2>
+              <h2 className="font-bold tracking-wide mb-3 text-sm">
+                VOS COORDONNÉES
+              </h2>
 
               <div className="flex gap-6 mb-3">
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     checked={civilite === "MME"}
@@ -101,7 +120,7 @@ export default function Home() {
                   />
                   Mme
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     checked={civilite === "M"}
@@ -113,14 +132,14 @@ export default function Home() {
 
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <input
-                  className="rounded-full px-4 py-2 text-neutral-800 placeholder-neutral-400"
+                  className="rounded-full px-4 py-2 text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-orange-400"
                   placeholder="Nom"
                   value={nom}
                   onChange={(e) => setNom(e.target.value)}
                   required
                 />
                 <input
-                  className="rounded-full px-4 py-2 text-neutral-800 placeholder-neutral-400"
+                  className="rounded-full px-4 py-2 text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-orange-400"
                   placeholder="Prénom"
                   value={prenom}
                   onChange={(e) => setPrenom(e.target.value)}
@@ -130,27 +149,27 @@ export default function Home() {
 
               <input
                 type="email"
-                className="w-full rounded-full px-4 py-2 mb-3 text-neutral-800 placeholder-neutral-400"
+                className="w-full rounded-full px-4 py-2 mb-3 text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-orange-400"
                 placeholder="Adresse mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
               <input
-                className="w-full rounded-full px-4 py-2 mb-6 text-neutral-800 placeholder-neutral-400"
+                className="w-full rounded-full px-4 py-2 mb-6 text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-orange-400"
                 placeholder="Téléphone"
                 value={telephone}
                 onChange={(e) => setTelephone(e.target.value)}
                 required
               />
 
-              <h2 className="font-bold tracking-wide mb-3">
+              <h2 className="font-bold tracking-wide mb-3 text-sm">
                 DISPONIBILITÉS POUR UNE VISITE
               </h2>
 
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <select
-                  className="rounded-full px-3 py-2 text-neutral-800"
+                  className="rounded-full px-3 py-2 text-neutral-800 outline-none"
                   value={jour}
                   onChange={(e) => setJour(e.target.value)}
                 >
@@ -161,7 +180,7 @@ export default function Home() {
                   ))}
                 </select>
                 <select
-                  className="rounded-full px-3 py-2 text-neutral-800"
+                  className="rounded-full px-3 py-2 text-neutral-800 outline-none"
                   value={heure}
                   onChange={(e) => setHeure(Number(e.target.value))}
                 >
@@ -172,7 +191,7 @@ export default function Home() {
                   ))}
                 </select>
                 <select
-                  className="rounded-full px-3 py-2 text-neutral-800"
+                  className="rounded-full px-3 py-2 text-neutral-800 outline-none"
                   value={minute}
                   onChange={(e) => setMinute(Number(e.target.value))}
                 >
@@ -185,7 +204,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={ajouterDispo}
-                  className="bg-purple-800 hover:bg-purple-900 text-white rounded-full px-4 py-2 text-sm font-semibold"
+                  className="bg-purple-800 hover:bg-purple-900 transition-colors text-white rounded-full px-4 py-2 text-sm font-semibold"
                 >
                   AJOUTER DISPO
                 </button>
@@ -203,7 +222,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={() => supprimerDispo(d.id)}
-                      className="ml-3 font-bold"
+                      className="ml-3 font-bold hover:text-red-600 transition-colors"
                       aria-label="Supprimer cette disponibilité"
                     >
                       ✕
@@ -215,7 +234,9 @@ export default function Home() {
 
             {/* Colonne droite : demande + message */}
             <div className="flex flex-col">
-              <h2 className="font-bold tracking-wide mb-3">VOTRE MESSAGE</h2>
+              <h2 className="font-bold tracking-wide mb-3 text-sm">
+                VOTRE MESSAGE
+              </h2>
 
               <div className="flex flex-wrap gap-6 mb-3">
                 {[
@@ -223,7 +244,7 @@ export default function Home() {
                   { value: "RAPPEL", label: "Être rappelé.e" },
                   { value: "PHOTOS", label: "Plus de photos" },
                 ].map((opt) => (
-                  <label key={opt.value} className="flex items-center gap-2">
+                  <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       checked={typeDemande === opt.value}
@@ -235,26 +256,31 @@ export default function Home() {
               </div>
 
               <textarea
-                className="flex-1 min-h-[180px] rounded-2xl p-4 text-neutral-800 placeholder-neutral-400 mb-6"
+                className="flex-1 min-h-[180px] rounded-2xl p-4 text-neutral-800 placeholder-neutral-400 mb-6 outline-none focus:ring-2 focus:ring-orange-400 resize-none"
                 placeholder="Votre message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
 
-              <button
-                type="submit"
-                disabled={envoi === "loading"}
-                className="self-end bg-orange-500 hover:bg-orange-600 text-white rounded-full px-8 py-3 font-bold disabled:opacity-60"
-              >
-                {envoi === "loading" ? "ENVOI..." : "ENVOYER"}
-              </button>
-
-              {envoi === "success" && (
-                <p className="text-green-300 mt-3 self-end">Message envoyé !</p>
-              )}
-              {envoi === "error" && (
-                <p className="text-red-300 mt-3 self-end">Erreur, réessaie.</p>
-              )}
+              <div className="flex items-center justify-end gap-4">
+                {envoi === "success" && (
+                  <p className="text-green-300 font-semibold">
+                    Message envoyé avec succès !
+                  </p>
+                )}
+                {envoi === "error" && (
+                  <p className="text-red-300 font-semibold">
+                    Erreur, réessaie.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={envoi === "loading"}
+                  className="bg-orange-500 hover:bg-orange-600 transition-colors text-white rounded-full px-8 py-3 font-bold disabled:opacity-60"
+                >
+                  {envoi === "loading" ? "ENVOI..." : "ENVOYER"}
+                </button>
+              </div>
             </div>
           </div>
         </form>

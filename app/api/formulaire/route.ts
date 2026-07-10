@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
       disponibilites,
     } = body;
 
-    // Validation minimale
     if (!nom || !prenom || !email || !telephone || !civilite || !typeDemande) {
       return NextResponse.json(
         { error: "Champs obligatoires manquants" },
